@@ -2,7 +2,7 @@ package de.randombyte.xmlgenerator.elements.control
 
 import de.randombyte.xmlgenerator.xml.XmlSerializable
 
-class Control(
+data class Control(
         val group: String? = null,
         val key: String,
         val description: String? = null,

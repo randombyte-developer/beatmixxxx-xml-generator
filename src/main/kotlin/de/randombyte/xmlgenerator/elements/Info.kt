@@ -2,7 +2,7 @@ package de.randombyte.xmlgenerator.elements
 
 import de.randombyte.xmlgenerator.xml.XmlSerializable
 
-class Info(
+data class Info(
         val name: String? = null,
         val author: String? = null,
         val description: String? = null,

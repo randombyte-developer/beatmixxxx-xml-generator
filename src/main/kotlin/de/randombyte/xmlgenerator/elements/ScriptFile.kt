@@ -3,7 +3,7 @@ package de.randombyte.xmlgenerator.elements
 import de.randombyte.xmlgenerator.xml.XmlSerializable
 import de.randombyte.xmlgenerator.xml.XmlSerializable.ValidationResult.Check
 
-class ScriptFile(
+data class ScriptFile(
         val filename: String,
         val functionPrefix: String
 ) : XmlSerializable() {

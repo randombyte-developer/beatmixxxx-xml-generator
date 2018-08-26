@@ -1,14 +1,14 @@
 package de.randombyte.xmlgenerator
 
 import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
-import de.randombyte.xmlgenerator.controllers.RELOOP_BEATMIX_4
+import de.randombyte.xmlgenerator.controllers.ReloopBeatMix4Preset
 import de.randombyte.xmlgenerator.xml.document
 import java.nio.file.Files
 import java.nio.file.Paths
 import javax.xml.stream.XMLOutputFactory
 
 val controllerPresets = mapOf(
-        "Beatmixxxx" to RELOOP_BEATMIX_4
+        "Beatmixxxx" to ReloopBeatMix4Preset.buildPreset()
 )
 
 fun main(args: Array<String>) {

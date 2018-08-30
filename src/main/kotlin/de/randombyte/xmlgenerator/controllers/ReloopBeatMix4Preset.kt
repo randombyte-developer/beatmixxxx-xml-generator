@@ -53,17 +53,19 @@ object ReloopBeatMix4Preset {
         val buttons = ALL_CHANNELS.use {
             val shift = control("shift", 0x20)
 
-            val transportControls = mapOf(
+            val controls = mapOf(
                     0x21 to "sync",
                     0x23 to "cue",
-                    0x24 to "play"
+                    0x24 to "play",
+                    0x26 to "pitchMinus",
+                    0x27 to "pitchPlus"
             ).flatMap { (midiNumber, key) ->
                 controlWithShift(key, midiNumber, 0x40)
             }
 
             val loadTrack = controlWithShift("load", 0x50, -0x10)
 
-            return@use shift + transportControls + loadTrack
+            return@use shift + controls + loadTrack
         }
 
         val fifthChannelControls = listOf(0xB5).use {
@@ -79,7 +81,6 @@ object ReloopBeatMix4Preset {
         } + RIGHT_SIDE_CHANNELS.use {
             control("rightDeckSwitch", 0x28)
         }
-
 
         return buttons + fifthChannelControls + fifthChannelButtons + deckSwitchButtons
     }

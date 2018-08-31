@@ -49,53 +49,29 @@ object ReloopBeatMix4Preset {
     private val RIGHT_SIDE_CHANNELS = listOf(0x92, 0x94)
     private val ALL_CHANNELS: Channels = LEFT_SIDE_CHANNELS + RIGHT_SIDE_CHANNELS
 
-    private fun buildControls(): List<Control> {
-        val buttons = ALL_CHANNELS.use {
-            val shift = control("shift", 0x20)
-
-            val controls = mapOf(
-                    0x21 to "sync",
-                    0x23 to "cue",
-                    0x24 to "play",
-                    0x26 to "pitchMinus",
-                    0x27 to "pitchPlus"
-            ).flatMap { (midiNumber, key) ->
-                controlWithShift(key, midiNumber, 0x40)
-            }
-
-            val loadTrack = controlWithShift("load", 0x50, -0x10)
-
-            return@use shift + controls + loadTrack
-        }
-
-        val fifthChannelControls = listOf(0xB5).use {
-            controlWithShift("traxRotate", 0x60, 0x10) + controlWithShift("crossfader", 0x2F, 0x30)
-        }
-
-        val fifthChannelButtons = listOf(0x95).use {
-            controlWithShift("traxPress", 0x09, 0x40)
-        }
-
-        val deckSwitchButtons = LEFT_SIDE_CHANNELS.use {
-            control("leftDeckSwitch", 0x28)
-        } + RIGHT_SIDE_CHANNELS.use {
-            control("rightDeckSwitch", 0x28)
-        }
-
-        val channelVolumeControls = (0xB1..0xB4).toList().use {
-            controlWithShift("volume", 0x14, 0x20)
-        }
-
-        val pitchControls = (0xE1..0xE4).toList().use {
-            control("rate", midiNumber = null)
-        }
-
-        return buttons +
-                fifthChannelControls +
-                fifthChannelButtons +
-                deckSwitchButtons +
-                channelVolumeControls +
-                pitchControls
+    private fun buildControls(): List<Control> = ALL_CHANNELS.use {
+        mapOf(
+                0x21 to "sync",
+                0x23 to "cue",
+                0x24 to "play",
+                0x26 to "pitchMinus",
+                0x27 to "pitchPlus",
+                0x3F to "wheelTouch"
+        ).flatMap { (midiNumber, key) ->
+            controlWithShift(key, midiNumber, 0x40)
+        }  + control("shift", 0x20) + controlWithShift("load", 0x50, -0x10)
+    } + listOf(0xB5).use {
+        controlWithShift("traxRotate", 0x60, 0x10) + controlWithShift("crossfader", 0x2F, 0x30)
+    } + listOf(0x95).use {
+        controlWithShift("traxPress", 0x09, 0x40)
+    } + LEFT_SIDE_CHANNELS.use {
+        control("leftDeckSwitch", 0x28)
+    } + RIGHT_SIDE_CHANNELS.use {
+        control("rightDeckSwitch", 0x28)
+    } + (0xB1..0xB4).toList().use {
+        controlWithShift("volume", 0x14, 0x20) + controlWithShift("wheelRotate", 0x60, 0x10)
+    } + (0xE1..0xE4).toList().use {
+        control("rate", midiNumber = null)
     }
 
     // Utils

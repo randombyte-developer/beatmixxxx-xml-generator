@@ -7,7 +7,7 @@ data class Control(
         val key: String,
         val description: String? = null,
         val status: Int,
-        val midiNumber: Int,
+        val midiNumber: Int?,
         val options: Set<String> = emptySet()
 ) : XmlSerializable() {
 
@@ -17,7 +17,7 @@ data class Control(
             element("key", key)
             element("description", description)
             element("status", status.hex)
-            element("midino", midiNumber.hex)
+            element("midino", midiNumber?.hex)
             element("options") {
                 options.forEach { option ->
                     element(option)

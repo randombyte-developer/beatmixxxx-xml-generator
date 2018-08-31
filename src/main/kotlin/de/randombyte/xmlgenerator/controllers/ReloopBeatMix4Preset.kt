@@ -82,19 +82,32 @@ object ReloopBeatMix4Preset {
             control("rightDeckSwitch", 0x28)
         }
 
-        return buttons + fifthChannelControls + fifthChannelButtons + deckSwitchButtons
+        val channelVolumeControls = (0xB1..0xB4).toList().use {
+            controlWithShift("volume", 0x14, 0x20)
+        }
+
+        val pitchControls = (0xE1..0xE4).toList().use {
+            control("rate", midiNumber = null)
+        }
+
+        return buttons +
+                fifthChannelControls +
+                fifthChannelButtons +
+                deckSwitchButtons +
+                channelVolumeControls +
+                pitchControls
     }
 
     // Utils
 
     private fun <R> Channels.use(func: ChannelUtil.() -> R) = ChannelUtil(this).func()
     private class ChannelUtil(val channels: Channels) {
-        fun control(key: String, midiNumber: Int) = control(key, midiNumber, channels)
+        fun control(key: String, midiNumber: Int?) = control(key, midiNumber, channels)
         fun controlWithShift(key: String, midiNumber: Int, shiftOffset: Int) = controlWithShift(key, midiNumber, shiftOffset, channels)
 
     }
 
-    private fun control(key: String, midiNumber: Int, channels: Channels): List<Control> =
+    private fun control(key: String, midiNumber: Int?, channels: Channels): List<Control> =
             channels.mapIndexed { channel0based, status ->
                 Control(
                         key = scriptFunction(key),
@@ -108,7 +121,7 @@ object ReloopBeatMix4Preset {
         val controls = control(key, midiNumber, channels)
 
         val shiftedControls = controls.map { control ->
-            control.copy(midiNumber = control.midiNumber + shiftOffset)
+            control.copy(midiNumber = control.midiNumber!! + shiftOffset)
         }
 
         return controls + shiftedControls

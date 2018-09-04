@@ -6,6 +6,7 @@ import de.randombyte.xmlgenerator.elements.Info
 import de.randombyte.xmlgenerator.elements.ScriptFile
 import de.randombyte.xmlgenerator.elements.control.Control
 import de.randombyte.xmlgenerator.elements.control.Options.SCRIPT_BINDING
+import de.randombyte.xmlgenerator.flatMapIndexed
 
 typealias Channels = List<Int>
 
@@ -59,7 +60,11 @@ object ReloopBeatMix4Preset {
                 0x3F to "wheelTouch"
         ).flatMap { (midiNumber, key) ->
             controlWithShift(key, midiNumber, 0x40)
-        }  + control("shift", 0x20) + controlWithShift("load", 0x50, -0x10)
+        } +
+                control("shift", 0x20) +
+                controlWithShift("load", 0x50, -0x10) +
+                controlWithShift("pfl", 0x52, -0x10) +
+                control("padModeA", 0x29) + control("padModeB", 0x2A)
     } + listOf(0xB5).use {
         controlWithShift("traxRotate", 0x60, 0x10) + controlWithShift("crossfader", 0x2F, 0x30)
     } + listOf(0x95).use {
@@ -72,6 +77,16 @@ object ReloopBeatMix4Preset {
         controlWithShift("volume", 0x14, 0x20) + controlWithShift("wheelRotate", 0x60, 0x10)
     } + (0xE1..0xE4).toList().use {
         control("rate", midiNumber = null)
+    } + ALL_CHANNELS.use {
+        mapOf<List<Int>, Function1<Int, String>>(
+                (0x00..0x07).toList() to { i -> "bluePad$i" },
+                (0x10..0x17).toList() to { i -> "redPad$i" }
+                //(0x00..0x03).toList() + (0x10..0x13).toList() to { i -> "violetPad$i" }
+        ).toList().flatMap { (midiNumbers, generateKey) ->
+            midiNumbers.flatMapIndexed { index, midiNumber ->
+                controlWithShift(generateKey(index), midiNumber, 0x08)
+            }
+        }
     }
 
     // Utils

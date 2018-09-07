@@ -74,7 +74,13 @@ object ReloopBeatMix4Preset {
     } + RIGHT_SIDE_CHANNELS.use {
         control("rightDeckSwitch", 0x28)
     } + (0xB1..0xB4).toList().use {
-        controlWithShift("volume", 0x14, 0x20) + controlWithShift("wheelRotate", 0x60, 0x10)
+        controlWithShift("volume", 0x14, 0x20) +
+                controlWithShift("wheelRotate", 0x60, 0x10) +
+                controlWithShift("gainKnob", 0x10, 0x20) +
+                controlWithShift("highKnob", 0x11, 0x20) +
+                controlWithShift("midKnob", 0x12, 0x20) +
+                controlWithShift("lowKnob", 0x13, 0x20)
+
     } + (0xE1..0xE4).toList().use {
         control("rate", midiNumber = null)
     } + ALL_CHANNELS.use {

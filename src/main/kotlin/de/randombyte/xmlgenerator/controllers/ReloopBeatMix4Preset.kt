@@ -53,8 +53,8 @@ object ReloopBeatMix4Preset {
     private fun buildControls(): List<Control> = ALL_CHANNELS.use {
         mapOf(
                 0x21 to "sync",
+                0x22 to "play",
                 0x23 to "cue",
-                0x24 to "play",
                 0x26 to "pitchMinus",
                 0x27 to "pitchPlus",
                 0x3F to "wheelTouch"

@@ -48,6 +48,7 @@ object ReloopBeatMix4Preset {
 
     private val LEFT_SIDE_CHANNELS = listOf(0x91, 0x93)
     private val RIGHT_SIDE_CHANNELS = listOf(0x92, 0x94)
+    private val EFFECTS_CHANNELS = listOf(0x91, 0x92)
     private val ALL_CHANNELS: Channels = LEFT_SIDE_CHANNELS + RIGHT_SIDE_CHANNELS
 
     private fun buildControls(): List<Control> = ALL_CHANNELS.use {
@@ -82,8 +83,16 @@ object ReloopBeatMix4Preset {
                 controlWithShift("lowKnob", 0x13, 0x20) +
                 controlWithShift("effectsEncoder", 0x61, 0x10)
 
+    } + listOf(0xB1, 0xB2).use {
+        (0..2).flatMap { index ->
+            controlWithShift("effectKnob$index", index + 1, 0x40)
+        }
     } + (0xE1..0xE4).toList().use {
         control("rate", midiNumber = null)
+    } + EFFECTS_CHANNELS.use {
+        (0..2).flatMap { index ->
+            controlWithShift("effectButton$index", 0x70 + index + 1, 0x03)
+        }
     } + ALL_CHANNELS.use {
         mapOf<List<Int>, Function1<Int, String>>(
                 (0x00..0x07).toList() to { i -> "bluePad$i" },

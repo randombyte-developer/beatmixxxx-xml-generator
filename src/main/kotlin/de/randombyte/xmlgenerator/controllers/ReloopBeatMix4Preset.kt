@@ -79,7 +79,8 @@ object ReloopBeatMix4Preset {
                 controlWithShift("gainKnob", 0x10, 0x20) +
                 controlWithShift("highKnob", 0x11, 0x20) +
                 controlWithShift("midKnob", 0x12, 0x20) +
-                controlWithShift("lowKnob", 0x13, 0x20)
+                controlWithShift("lowKnob", 0x13, 0x20) +
+                controlWithShift("effectsEncoder", 0x61, 0x10)
 
     } + (0xE1..0xE4).toList().use {
         control("rate", midiNumber = null)

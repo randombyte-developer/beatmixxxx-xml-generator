@@ -1,0 +1,41 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.3.0"
+    id "com.github.johnrengelman.shadow" version "2.0.4"
+}
+
+group "de.randombyte"
+version "1.0.0"
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    compile.extendsFrom shadow
+}
+
+dependencies {
+    shadow "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.0"
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+
+    relocate "kotlin", "de.randombyte.unity.shaded.kotlin"
+
+    classifier = null // Remove '-all' suffix from output file name
+}
+
+build.dependsOn shadowJar
+
+jar {
+    manifest {
+        attributes "Main-Class": "de.randombyte.xmlgenerator.MainKt"
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}

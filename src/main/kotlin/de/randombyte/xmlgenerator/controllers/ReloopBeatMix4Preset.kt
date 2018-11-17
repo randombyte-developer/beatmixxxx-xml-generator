@@ -69,7 +69,7 @@ object ReloopBeatMix4Preset {
     } + listOf(0xB5).use {
         controlWithShift("traxRotate", 0x60, 0x10) + controlWithShift("crossfader", 0x2F, 0x30)
     } + listOf(0x95).use {
-        controlWithShift("traxPress", 0x09, 0x40)
+        controlWithShift("traxPress", 0x09, 0x40) + controlWithShift("back", 0x08, 0x40)
     } + LEFT_SIDE_CHANNELS.use {
         control("leftDeckSwitch", 0x28)
     } + RIGHT_SIDE_CHANNELS.use {

@@ -58,7 +58,8 @@ object ReloopBeatMix4Preset {
                 0x23 to "cue",
                 0x26 to "pitchMinus",
                 0x27 to "pitchPlus",
-                0x3F to "wheelTouch"
+                0x3F to "wheelTouch",
+				0x25 to "effectsButton"
         ).flatMap { (midiNumber, key) ->
             controlWithShift(key, midiNumber, 0x40)
         } +
@@ -83,9 +84,7 @@ object ReloopBeatMix4Preset {
                 controlWithShift("highKnob", 0x11, 0x20) +
                 controlWithShift("midKnob", 0x12, 0x20) +
                 controlWithShift("lowKnob", 0x13, 0x20) +
-                controlWithShift("effectsEncoder", 0x61, 0x10) +
-				controlWithShift("effectsButton", 0x25, 0x40)
-
+                controlWithShift("effectsEncoder", 0x61, 0x10)
     } + listOf(0xB1, 0xB2).use {
         (0..2).flatMap { index ->
             controlWithShift("effectKnob$index", index + 1, 0x40)

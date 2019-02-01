@@ -67,7 +67,9 @@ object ReloopBeatMix4Preset {
                 controlWithShift("pfl", 0x52, -0x10) +
                 control("padModeA", 0x29) + control("padModeB", 0x2A)
     } + listOf(0xB5).use {
-        controlWithShift("traxRotate", 0x60, 0x10) + controlWithShift("crossfader", 0x2F, 0x30)
+        controlWithShift("traxRotate", 0x60, 0x10) +
+				controlWithShift("crossfader", 0x2F, 0x30) +
+				controlWithShift("samplerVolume", 0x03, 0x30)
     } + listOf(0x95).use {
         controlWithShift("traxPress", 0x09, 0x40) + controlWithShift("back", 0x08, 0x40)
     } + LEFT_SIDE_CHANNELS.use {
@@ -81,7 +83,8 @@ object ReloopBeatMix4Preset {
                 controlWithShift("highKnob", 0x11, 0x20) +
                 controlWithShift("midKnob", 0x12, 0x20) +
                 controlWithShift("lowKnob", 0x13, 0x20) +
-                controlWithShift("effectsEncoder", 0x61, 0x10)
+                controlWithShift("effectsEncoder", 0x61, 0x10) +
+				controlWithShift("effectsButton", 0x25, 0x40)
 
     } + listOf(0xB1, 0xB2).use {
         (0..2).flatMap { index ->

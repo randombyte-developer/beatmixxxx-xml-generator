@@ -39,6 +39,12 @@ fun main(args: Array<String>) {
         return
     }
 
+    val midiToNameMappingString = getMidiToNameMapping(
+            prefix = controllerPreset.controllers.first().scriptFiles.first().functionPrefix,
+            controls = controllerPreset.controllers.first().controls
+    )
+    println("\n\n" + midiToNameMappingString + "\n\n")
+
     val outputFilePath = Paths.get(outputFilePathString)
 
     Files.createDirectories(outputFilePath.parent)

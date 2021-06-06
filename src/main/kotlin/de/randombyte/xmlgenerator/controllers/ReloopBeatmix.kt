@@ -22,13 +22,6 @@ object ReloopBeatmix {
     fun buildPreset(): ControllerPreset {
         val controls = buildControls()
 
-        val midiToNameMappingString = getMidiToNameMapping(controls)
-        println()
-        println()
-        println(midiToNameMappingString)
-        println()
-        println()
-
         val controller = Controller(
                 id = "ReloopBeatmix",
                 scriptFiles = listOf(
@@ -49,55 +42,71 @@ object ReloopBeatmix {
     private val ALL_CHANNELS_OFFSET = listOf(0x00, 0x01)
 
     private const val BUTTON_BASE = 0x90
-    private const val POTENTIOMETER_BASE = 0xB0
+    private const val POTI_BASE = 0xB0
+    private const val DECK_INDEPENDENT_BUTTON_BASE = BUTTON_BASE + 0x04
+    private const val DECK_INDEPENDENT_POTI_BASE = POTI_BASE + 0x04
 
-    private const val DECK_INDEPENDENT = 0xB4
+    private const val BUTTON_SHIFT_OFFSET = -0x20
+    private const val ENCODER_SHIFT_OFFSET = 0x01
+    private const val POTI_SHIFT_OFFSET = 0x08
 
     private fun buildControls(): List<Control> {
         val builder = ControlListBuilder().apply {
 
-            +control(name = "Crossfader",   status = DECK_INDEPENDENT, msb = 0x53)
-            +control(name = "Headphone",    status = DECK_INDEPENDENT, msb = 0x51)
-            +control(name = "HeadphoneMix", status = DECK_INDEPENDENT, msb = 0x51)
-            +control(name = "TraxButton",   status = DECK_INDEPENDENT, msb = 0x20, shiftOffset = 0x20)
-            +control(name = "TraxEncoder",  status = DECK_INDEPENDENT, msb = 0x18, shiftOffset = 0x01)
+            +control(name = "Crossfader",   status = DECK_INDEPENDENT_POTI_BASE, msb = 0x53)
+            +control(name = "Headphone",    status = DECK_INDEPENDENT_POTI_BASE, msb = 0x51)
+            +control(name = "HeadphoneMix", status = DECK_INDEPENDENT_POTI_BASE, msb = 0x52)
+            +control(name = "TraxButton",   status = DECK_INDEPENDENT_BUTTON_BASE, msb = 0x20, shiftOffset = 0x20)
+            +control(name = "TraxEncoder",  status = DECK_INDEPENDENT_POTI_BASE, msb = 0x18, shiftOffset = ENCODER_SHIFT_OFFSET)
 
             ALL_CHANNELS_OFFSET.forEach { i ->
-                val s = 0xB0 + i
+                val knob = POTI_BASE + i
+                val button = BUTTON_BASE + i
 
-                +control(name = "${i}Play",             status = s, msb = 0x2F, shiftOffset = -0x20)
-                +control(name = "${i}Cue",              status = s, msb = 0x2E, shiftOffset = -0x20)
-                +control(name = "${i}Sync",             status = s, msb = 0x2C, shiftOffset = -0x20)
-                +control(name = "${i}LoopButton",       status = s, msb = 0x14, shiftOffset = 0x3C) // TODO ab hier
-                +control(name = "${i}JogTouchButton",   status = s, msb = 0x36, shiftOffset = 0x31)
+                +control(name = "${i}Play",             status = button,    msb = 0x2F, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}Cue",              status = button,    msb = 0x2E, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}Sync",             status = button,    msb = 0x2C, shiftOffset = BUTTON_SHIFT_OFFSET)
 
-                +control(name = "${i}Tempo",            status = s, msb = 0x00, lsb = 0x20, shiftOffset = 0x05)
-                +control(name = "${i}LoopEncoder",      status = s, msb = 0x13, shiftOffset = 0x3C)
+                +control(name = "${i}Shift",            status = button,    msb = 0x28)
 
-                +control(name = "${i}JogEncoder",       status = s, msb = 0x21, shiftOffset = 0x05)
-                +control(name = "${i}JogEncoderTouch",  status = s, msb = 0x22, shiftOffset = 0x05)
+                +control(name = "${i}Volume",           status = knob,      msb = 0x37 + 0x10 * i)
+                +control(name = "${i}Load",             status = button,    msb = 0x32, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}Pfl",              status = button,    msb = 0x23, shiftOffset = BUTTON_SHIFT_OFFSET)
 
-                +control(name = "${i}Volume",           status = s, msb = 0x13 + 2 * i, lsb = 0x33 + 2 * i, shiftOffset = 0x01)
-                +control(name = "${i}Load",             status = s, msb = 0x46 + i, shiftOffset = 0x12)
-                +control(name = "${i}Pfl",              status = s, msb = 0x54 + i)
+                +control(name = "${i}FxSelectButton",   status = button,    msb = 0x30, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}FxSelectEncoder",  status = knob,      msb = 0x10 + 0x04 * i, shiftOffset = ENCODER_SHIFT_OFFSET)
+
+                +control(name = "${i}Param2",           status = knob,      msb = 0x30 + 0x11 * i, shiftOffset = POTI_SHIFT_OFFSET)
+                +control(name = "${i}Filter",           status = knob,      msb = 0x31 + 0x0F * i, shiftOffset = POTI_SHIFT_OFFSET)
+
+                +control(name = "${i}LoopButton",       status = button,    msb = 0x31, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}LoopEncoder",      status = knob,      msb = 0x12 + 0x04 * i, shiftOffset = ENCODER_SHIFT_OFFSET)
+
+                +control(name = "${i}FxOn",             status = button,    msb = 0x20, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}BeatMash",         status = button,    msb = 0x21 + 0x01 * i, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}AutoLoop",         status = button,    msb = 0x22 - 0x01 * i, shiftOffset = BUTTON_SHIFT_OFFSET)
+
+                +control(name = "${i}Tempo",            status = knob,      msb = 0x36 + 0x10 * i, lsb = 0x76, shiftOffset = POTI_SHIFT_OFFSET)
+
+                +control(name = "${i}JogTouchButton",   status = button,    msb = 0x3F, shiftOffset = 0x20)
+                +control(name = "${i}JogEncoder",       status = knob,      msb = 0x20 + 0x02 * i, shiftOffset = ENCODER_SHIFT_OFFSET)
+
+                +control(name = "${i}PitchBendMinus",   status = button,    msb = 0x26, shiftOffset = BUTTON_SHIFT_OFFSET)
+                +control(name = "${i}PitchBendPlus",    status = button,    msb = 0x27, shiftOffset = BUTTON_SHIFT_OFFSET)
 
                 listOf("High", "Mid", "Low").forEachIndexed { eqIndex, eqName ->
                     +control(
                             name = "${i}Eq$eqName",
-                            status = 0xB6,
-                            msb = 0x07 + i + 4 * eqIndex,
-                            lsb = 0x27 + i + 4 * eqIndex
+                            status = knob,
+                            msb = 0x33 + eqIndex + 0x10 * i,
+                            shiftOffset = 0x08
                     )
                 }
 
-                (0..3).forEach { effectIndex ->
-                    val effectStatusOffset = i % 2
-                    val effectOffset = if (i in LAYERED_CHANNELS_OFFSET) 0x05 else 0x00
-                    +control(name = "${i}Effect$effectIndex", status = 0x94 + effectStatusOffset, msb = 0x43 + effectOffset + effectIndex, shiftOffset = 0x0A)
-                }
+                +control(name = "${i}Gain",             status = knob,      msb = 0x32 + 0x10 * i, shiftOffset = POTI_SHIFT_OFFSET)
 
-                (0..3).forEach { hotCueIndex ->
-                    +control(name = "${i}Hotcue$hotCueIndex", status = s, msb = 0x2E + hotCueIndex, shiftOffset = 0x31)
+                (0..2).forEach { hotCueIndex ->
+                    +control(name = "${i}Hotcue$hotCueIndex", status = button, msb = 0x29 + hotCueIndex, shiftOffset = BUTTON_SHIFT_OFFSET)
                 }
             }
         }

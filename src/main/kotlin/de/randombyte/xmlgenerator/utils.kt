@@ -12,15 +12,15 @@ fun control(name: String, status: Int, msb: Int, lsb: Int? = null, shiftOffset: 
     val controls = mutableListOf<Control>()
 
     if (lsb != null) {
-        val control = Control(key = name + "Msb", status = status, midiNumber = msb, options = setOf(Options.SCRIPT_BINDING))
+        val control = Control(internalKey = name + "Msb", status = status, midiNumber = msb, options = setOf(Options.SCRIPT_BINDING))
         controls += control
-        controls += control.copy(key = name + "Lsb", midiNumber = lsb)
+        controls += control.copy(internalKey = name + "Lsb", midiNumber = lsb)
     } else {
-        controls += Control(key = name, status = status, midiNumber = msb, options = setOf(Options.SCRIPT_BINDING))
+        controls += Control(internalKey = name, status = status, midiNumber = msb, options = setOf(Options.SCRIPT_BINDING))
     }
 
     if (shiftOffset != null) {
-        controls += controls.map { it.copy(key = it.key + "Shifted", midiNumber = it.midiNumber!! + shiftOffset) }
+        controls += controls.map { it.copy(internalKey = it.internalKey + "Shifted", midiNumber = it.midiNumber!! + shiftOffset) }
     }
 
     return controls
@@ -36,7 +36,7 @@ class ControlListBuilder {
 }
 
 // For the typescript mapping
-fun getMidiToNameMapping(controls: List<Control>): String {
+fun getMidiToNameMapping(prefix: String, controls: List<Control>): String {
     fun Int.hex() = "0x" + String.format("%02X", this)
 
     return controls
@@ -44,7 +44,7 @@ fun getMidiToNameMapping(controls: List<Control>): String {
             .toList()
             .joinToString(prefix = "{\n", separator = ",\n", postfix = "}") { (status, statusControls) ->
                 status.hex() + ": {\n" + statusControls.joinToString(separator = ",\n") { control ->
-                    "${control.midiNumber!!.hex()}: \"${control.key}\""
+                    "${control.midiNumber!!.hex()}: \"${control.internalKey}\""
                 } + "\n}"
             }
 }

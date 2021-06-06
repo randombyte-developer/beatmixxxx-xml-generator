@@ -4,7 +4,8 @@ import de.randombyte.xmlgenerator.xml.XmlSerializable
 
 data class Control(
         val group: String? = null,
-        val key: String,
+        val key: String = "NOT_SET",
+        val internalKey: String, // only for the JS mapping, not serialized to XML
         val description: String? = null,
         val status: Int,
         val midiNumber: Int?,

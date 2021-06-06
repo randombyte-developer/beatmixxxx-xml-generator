@@ -120,6 +120,7 @@ object ReloopBeatMix4Preset {
             channels.mapIndexed { channel0based, status ->
                 Control(
                         key = scriptFunction(key),
+                        internalKey = "",
                         status = status,
                         midiNumber = midiNumber,
                         options = setOf(SCRIPT_BINDING)

@@ -23,13 +23,6 @@ object PioneerDdjWego {
     fun buildPreset(): ControllerPreset {
         val controls = buildControls()
 
-        val midiToNameMappingString = getMidiToNameMapping(controls)
-        println()
-        println()
-        println(midiToNameMappingString)
-        println()
-        println()
-
         val controller = Controller(
                 id = "PioneerDDJWego",
                 scriptFiles = listOf(

@@ -1,11 +1,14 @@
 package de.randombyte.xmlgenerator.controllers
 
+import de.randombyte.xmlgenerator.ControlListBuilder
+import de.randombyte.xmlgenerator.control
 import de.randombyte.xmlgenerator.elements.Controller
 import de.randombyte.xmlgenerator.elements.ControllerPreset
 import de.randombyte.xmlgenerator.elements.Info
 import de.randombyte.xmlgenerator.elements.ScriptFile
 import de.randombyte.xmlgenerator.elements.control.Control
 import de.randombyte.xmlgenerator.elements.control.Options.SCRIPT_BINDING
+import de.randombyte.xmlgenerator.getMidiToNameMapping
 
 object PioneerDdjWego {
 
@@ -14,7 +17,7 @@ object PioneerDdjWego {
     val INFO = Info(
             name = "PioneerDDJWego",
             author = "RandomByte",
-            description = "An experimental mapping for the Pioneer DDj Wego"
+            description = "An experimental mapping for the Pioneer DDJ Wego"
     )
 
     fun buildPreset(): ControllerPreset {
@@ -106,46 +109,5 @@ object PioneerDdjWego {
         }
 
         return builder.controls
-    }
-
-    private fun control(name: String, status: Int, msb: Int, lsb: Int? = null, shiftOffset: Int? = null): List<Control> {
-        val controls = mutableListOf<Control>()
-
-        if (lsb != null) {
-            val control = Control(key = name + "Msb", status = status, midiNumber = msb, options = setOf(SCRIPT_BINDING))
-            controls += control
-            controls += control.copy(key = name + "Lsb", midiNumber = lsb)
-        } else {
-            controls += Control(key = name, status = status, midiNumber = msb, options = setOf(SCRIPT_BINDING))
-        }
-
-        if (shiftOffset != null) {
-            controls += controls.map { it.copy(key = it.key + "Shifted", midiNumber = it.midiNumber!! + shiftOffset) }
-        }
-
-        return controls
-    }
-
-    class ControlListBuilder {
-        private val allControls = mutableListOf<Control>()
-        val controls: List<Control> get() = allControls
-
-        operator fun List<Control>.unaryPlus() {
-            allControls.addAll(this)
-        }
-    }
-
-    // For the typescript mapping
-    private fun getMidiToNameMapping(controls: List<Control>): String {
-        fun Int.hex() = "0x" + String.format("%02X", this)
-
-        return controls
-                .groupBy { it.status }
-                .toList()
-                .joinToString(prefix = "{\n", separator = ",\n", postfix = "}") { (status, statusControls) ->
-                    status.hex() + ": {\n" + statusControls.joinToString(separator = ",\n") { control ->
-                        "${control.midiNumber!!.hex()}: \"${control.key}\""
-                    } + "\n}"
-                }
     }
 }

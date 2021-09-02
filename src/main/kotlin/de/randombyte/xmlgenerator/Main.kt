@@ -1,6 +1,7 @@
 package de.randombyte.xmlgenerator
 
 import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
+import de.randombyte.xmlgenerator.controllers.NumarkNv2
 import de.randombyte.xmlgenerator.controllers.PioneerDdjWego
 import de.randombyte.xmlgenerator.controllers.ReloopBeatMix4Preset
 import de.randombyte.xmlgenerator.controllers.ReloopBeatmix
@@ -12,7 +13,8 @@ import javax.xml.stream.XMLOutputFactory
 val controllerPresets = listOf(
         ReloopBeatMix4Preset.buildPreset(),
         PioneerDdjWego.buildPreset(),
-        ReloopBeatmix.buildPreset()
+        ReloopBeatmix.buildPreset(),
+        NumarkNv2.buildPreset()
 ).map { it.info.name to it }.toMap()
 
 fun main(args: Array<String>) {

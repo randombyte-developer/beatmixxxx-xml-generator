@@ -41,7 +41,7 @@ object NumarkNv2 {
     // the controller supports 4 channels but only 2 are used
     private val ALL_CHANNELS_OFFSET = listOf(0x01, 0x02)
 
-    private const val BUTTON_BASE = 0x90
+    private const val BUTTON_BASE = 0x80
     // "on" status is 0x91, "off" is 0x81
     // we ignore the status and only react to the data2 byte, which is >0x00 for "on" and =0x00 for "off" (velocity pads included)
     private val BUTTON_OFFSETS = listOf(0x00, 0x10)
@@ -59,35 +59,42 @@ object NumarkNv2 {
                 +control(name = "TraxEncoder", status = POTI_BASE, msb = it)
             }
 
-            ALL_CHANNELS_OFFSET.forEachIndexed { i, offset ->
-                val knob = POTI_BASE + offset
-                val button = BUTTON_BASE + offset
+            ALL_CHANNELS_OFFSET.forEachIndexed { i, channelOffset ->
+                val knob = POTI_BASE + channelOffset
 
-                +control(name = "${i}TraxButton",       status = button,        msb = 0x07)
+                listOf(0x00, 0x10).forEach { buttonStatusOffset ->
+                    val button = BUTTON_BASE + channelOffset + buttonStatusOffset
 
-                +control(name = "${i}Play",             status = button,        msb = 0x21)
-                +control(name = "${i}Cue",              status = button,        msb = 0x20)
-                +control(name = "${i}Sync",             status = button,        msb = 0x1F)
+                    +control(name = "${i}TraxButton",       status = button,        msb = 0x07)
 
-                +control(name = "${i}Shift",            status = button,        msb = 0x0D)
+                    +control(name = "${i}Play",             status = button,        msb = 0x21)
+                    +control(name = "${i}Cue",              status = button,        msb = 0x20)
+                    +control(name = "${i}Sync",             status = button,        msb = 0x1F)
+                    +control(name = "${i}Shift",            status = button,        msb = 0x0D)
+                    +control(name = "${i}Back",             status = button,        msb = 0x08)
 
-                +control(name = "${i}Volume",           status = knob,          msb = 0x08 + 0x05 * i,  lsb = 0x28 + 0x05 * i)
-                +control(name = "${i}Back",             status = button,        msb = 0x08)
-                +control(name = "${i}Pfl",              status = BUTTON_BASE,   msb = 0x35 + i)
+                    +control(name = "${i}Pfl",              status = BUTTON_BASE + buttonStatusOffset,   msb = 0x35 + i)
 
-                +control(name = "${i}Loop",             status = button,        msb = 0x1B)
+                    +control(name = "${i}Loop",             status = button,        msb = 0x1B)
+                    +control(name = "${i}JogTouchButton",   status = button,        msb = 0x5D)
+
+                    +control(name = "${i}TempoLed0",        status = button,        msb = 0x51)
+
+                    +control(name = "${i}PitchBendMinus",   status = button,        msb = 0x10) // TempoLedDown
+                    +control(name = "${i}PitchBendPlus",    status = button,        msb = 0x11) // TempoLedUp
+
+                    +control(name = "${i}ParamAdjustLeft",  status = button,        msb = 0x0E)
+                    +control(name = "${i}ParamAdjustRight", status = button,        msb = 0x0F)
+
+                    (0..7).forEach { hotCueIndex ->
+                        +control(name = "${i}Hotcue$hotCueIndex", status = button, msb = 0x47 + hotCueIndex)
+                    }
+                }
+                +control(name = "${i}Volume",           status = POTI_BASE,     msb = 0x08 + 0x05 * i,  lsb = 0x28 + 0x05 * i)
 
                 +control(name = "${i}Tempo",            status = knob,          msb = 0x01,             lsb = 0x21)
-                +control(name = "${i}TempoLed0",        status = button,        msb = 0x51)
 
-                +control(name = "${i}JogTouchButton",   status = button,        msb = 0x5D)
-                +control(name = "${i}JogEncoder",       status = knob,          msb = 0x00,             lsb = 0x20)
-
-                +control(name = "${i}PitchBendMinus",   status = button,        msb = 0x10) // TempoLedDown
-                +control(name = "${i}PitchBendPlus",    status = button,        msb = 0x11) // TempoLedUp
-
-                +control(name = "${i}ParamAdjustLeft",  status = button,        msb = 0x0E)
-                +control(name = "${i}ParamAdjustRight", status = button,        msb = 0x0F)
+                +control(name = "${i}JogEncoder",       status = knob,          msb = 0x20,             lsb = 0x00)
 
                 +control(name = "${i}Filter",           status = POTI_BASE,     msb = 0x5B + i,         lsb = 0x7B + i)
                 +control(name = "${i}VuLevel",          status = POTI_BASE,     msb = 0x4B + i)
@@ -99,10 +106,6 @@ object NumarkNv2 {
                             msb = 0x09 + eqIndex + i * 0x05,
                             lsb = 0x29 + eqIndex + i * 0x05
                     )
-                }
-
-                (0..7).forEach { hotCueIndex ->
-                    +control(name = "${i}Hotcue$hotCueIndex", status = button, msb = 0x47 + hotCueIndex)
                 }
             }
         }

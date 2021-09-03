@@ -78,17 +78,19 @@ object NumarkNv2 {
                 +control(name = "${i}Loop",             status = button,        msb = 0x1B)
 
                 +control(name = "${i}Tempo",            status = knob,          msb = 0x01,             lsb = 0x21)
+                +control(name = "${i}TempoLed0",        status = button,        msb = 0x51)
 
                 +control(name = "${i}JogTouchButton",   status = button,        msb = 0x5D)
                 +control(name = "${i}JogEncoder",       status = knob,          msb = 0x00,             lsb = 0x20)
 
-                +control(name = "${i}PitchBendMinus",   status = button,        msb = 0x10)
-                +control(name = "${i}PitchBendPlus",    status = button,        msb = 0x11)
+                +control(name = "${i}PitchBendMinus",   status = button,        msb = 0x10) // TempoLedDown
+                +control(name = "${i}PitchBendPlus",    status = button,        msb = 0x11) // TempoLedUp
 
                 +control(name = "${i}ParamAdjustLeft",  status = button,        msb = 0x0E)
                 +control(name = "${i}ParamAdjustRight", status = button,        msb = 0x0F)
 
                 +control(name = "${i}Filter",           status = POTI_BASE,     msb = 0x5B + i,         lsb = 0x7B + i)
+                +control(name = "${i}VuLevel",          status = POTI_BASE,     msb = 0x4B + i)
 
                 listOf("EqLow", "EqMid", "EqHigh", "Gain").forEachIndexed { eqIndex, eqName ->
                     +control(

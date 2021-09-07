@@ -8,7 +8,7 @@ fun <T, R> Iterable<T>.flatMapIndexed(transform: (Int, T) -> Iterable<R>): List<
         .mapIndexed { index, t -> Pair(index, t) }
         .flatMap { (index, t) -> transform(index, t) }
 
-fun control(name: String, status: Int, msb: Int, lsb: Int? = null, shiftOffset: Int? = null): List<Control> {
+fun control(name: String, status: Int, msb: Int, lsb: Int? = null, shiftOffset: Int? = null, statusShiftOffset: Int? = null): List<Control> {
     val controls = mutableListOf<Control>()
 
     if (lsb != null) {
@@ -21,6 +21,10 @@ fun control(name: String, status: Int, msb: Int, lsb: Int? = null, shiftOffset: 
 
     if (shiftOffset != null) {
         controls += controls.map { it.copy(internalKey = it.internalKey + "Shifted", midiNumber = it.midiNumber!! + shiftOffset) }
+    }
+
+    if (statusShiftOffset != null) {
+        controls += controls.map { it.copy(internalKey = it.internalKey + "Shifted", status = it.status + statusShiftOffset) }
     }
 
     return controls

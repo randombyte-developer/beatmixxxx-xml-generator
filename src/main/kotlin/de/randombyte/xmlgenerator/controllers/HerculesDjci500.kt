@@ -37,7 +37,7 @@ object HerculesDjci500 {
         )
     }
 
-    private val ALL_CHANNELS_OFFSET = listOf(0x00, 0x01)
+    private val ALL_CHANNELS_OFFSET = listOf(0x01, 0x02)
 
     private const val STATUS_SHIFT_OFFSET = 0xB0
 

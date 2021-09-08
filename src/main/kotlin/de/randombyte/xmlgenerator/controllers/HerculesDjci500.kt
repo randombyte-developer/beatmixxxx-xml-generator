@@ -39,7 +39,7 @@ object HerculesDjci500 {
 
     private val ALL_CHANNELS_OFFSET = listOf(0x01, 0x02)
 
-    private const val STATUS_SHIFT_OFFSET = 0xB0
+    private const val STATUS_SHIFT_OFFSET = 0x03
 
     private const val BUTTON_BASE = 0x90
     private const val POTI_BASE = 0xB0
@@ -89,8 +89,8 @@ object HerculesDjci500 {
                     +control(
                             name = "$i$eqName",
                             status = knob,
-                            msb = eqIndex + 0x01,
-                            lsb = eqIndex + 0x21
+                            msb = eqIndex + 0x00,
+                            lsb = eqIndex + 0x20
                     )
                 }
             }

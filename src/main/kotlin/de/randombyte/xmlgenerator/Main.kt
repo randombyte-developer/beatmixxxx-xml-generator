@@ -8,11 +8,12 @@ import java.nio.file.Paths
 import javax.xml.stream.XMLOutputFactory
 
 val controllerPresets = listOf(
-        ReloopBeatMix4Preset.buildPreset(),
-        PioneerDdjWego.buildPreset(),
-        ReloopBeatmix.buildPreset(),
-        NumarkNv2.buildPreset(),
-        HerculesDjci500.buildPreset()
+    ReloopBeatMix4Preset.buildPreset(),
+    PioneerDdjWego.buildPreset(),
+    ReloopBeatmix.buildPreset(),
+    NumarkNv2.buildPreset(),
+    HerculesDjci500.buildPreset(),
+    PioneerDdj1000.buildPreset()
 ).map { it.info.name to it }.toMap()
 
 fun main(args: Array<String>) {

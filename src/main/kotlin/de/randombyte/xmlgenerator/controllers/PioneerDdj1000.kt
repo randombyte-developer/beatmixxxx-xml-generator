@@ -71,7 +71,8 @@ object PioneerDdj1000 {
                 +control(name = "${offset}LoopOut", status = button, msb = 0x11)
 
                 +control(name = "${offset}JogTouchButton", status = button, msb = 0x36)
-                +control(name = "${offset}JogEncoder", status = knob, msb = 0x21)
+                +control(name = "${offset}JogEncoderUntouched", status = knob, msb = 0x21)
+                +control(name = "${offset}JogEncoderTouched", status = knob, msb = 0x22)
 
                 +control(name = "${offset}Tempo", status = knob, msb = 0x00, lsb = 0x20)
 

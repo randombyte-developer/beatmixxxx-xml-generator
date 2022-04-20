@@ -50,7 +50,7 @@ object PioneerDdj1000 {
             +control(name = "HeadphoneMix", status = 0xB6, msb = 0x0C, lsb = 0x2C)
             +control(name = "Master", status = 0xB6, msb = 0x08, lsb = 0x28)
 
-            +control(name = "TraxEncoder", status = 0xB6, msb = 0x40, statusShiftOffset = 0x24)
+            +control(name = "TraxEncoder", status = 0xB6, msb = 0x40, shiftOffset = 0x24)
             +control(name = "LibraryView", status = 0x96, msb = 0x7A)
             +control(name = "LibraryBack", status = 0x96, msb = 0x65)
 
@@ -58,11 +58,11 @@ object PioneerDdj1000 {
                 val knob = POTI_BASE + offset
                 val button = BUTTON_BASE + offset
 
-                +control(name = "${offset}TraxButton", status = 0x96, msb = 0x46 + offset, statusShiftOffset = 0x17)
+                +control(name = "${offset}TraxButton", status = 0x96, msb = 0x46 + offset, shiftOffset = 0x17)
 
                 +control(name = "${offset}Play", status = button, msb = 0x0B)
                 +control(name = "${offset}Cue", status = button, msb = 0x0C)
-                +control(name = "${offset}Sync", status = button, msb = 0x58)
+                +control(name = "${offset}Sync", status = button, msb = 0x58, shiftOffset = 0x1D)
                 +control(name = "${offset}Shift", status = button, msb = 0x3F)
                 +control(name = "${offset}Pfl", status = button, msb = 0x54)
 
@@ -80,19 +80,13 @@ object PioneerDdj1000 {
                 +control(name = "${offset}SearchForward", status = button, msb = 0x5F)
 
                 val pad = 0x90 + offset * 0x02 + 0x07
-                val padShifted = 0x90 + offset * 0x02 + 0x08
 
                 (0..3).forEach { hotCueIndex ->
-                    +control(name = "${offset}Hotcue$hotCueIndex", status = pad, msb = hotCueIndex)
-                    +control(name = "${offset}Hotcue${hotCueIndex}Shifted", status = padShifted, msb = hotCueIndex)
+                    +control(name = "${offset}Hotcue$hotCueIndex", status = pad, msb = hotCueIndex, statusShiftOffset = 0x01)
                 }
 
                 +control(name = "${offset}BeatjumpBackward", status = pad, msb = 0x21)
                 +control(name = "${offset}BeatjumpForward", status = pad, msb = 0x22)
-
-                +control(name = "${offset}KillLow", status = pad, msb = 0x10)
-                +control(name = "${offset}KillMid", status = pad, msb = 0x11)
-                +control(name = "${offset}KillHigh", status = pad, msb = 0x12)
 
                 +control(name = "${offset}Gain", status = knob, msb = 0x04, lsb = 0x24)
                 +control(name = "${offset}Filter", status = 0xB6, msb = 0x17 + offset, lsb = 0x37 + offset)

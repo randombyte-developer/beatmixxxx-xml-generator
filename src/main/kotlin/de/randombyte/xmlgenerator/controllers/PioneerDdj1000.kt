@@ -99,6 +99,10 @@ object PioneerDdj1000 {
                             lsb = 0x27 + eqIndex * 0x04
                     )
                 }
+
+                +control(name = "${offset}CrossfaderAssignLeft", status = button, msb = 0x16)
+                +control(name = "${offset}CrossfaderAssignCenter", status = button, msb = 0x1D)
+                +control(name = "${offset}CrossfaderAssignRight", status = button, msb = 0x18)
             }
         }
 

@@ -8,23 +8,23 @@ import de.randombyte.xmlgenerator.elements.Info
 import de.randombyte.xmlgenerator.elements.ScriptFile
 import de.randombyte.xmlgenerator.elements.control.Control
 
-object PioneerDdj1000 {
-    private val FUNCTION_PREFIX = "PioneerDdj1000"
+object PioneerDdj800 {
+    private val FUNCTION_PREFIX = "PioneerDdj800"
 
     val INFO = Info(
-            name = "PioneerDdj1000",
+            name = "PioneerDdj800",
             author = "RandomByte",
-            description = "An experimental mapping for the Pioneer DDJ 1000"
+            description = "An experimental mapping for the Pioneer DDJ 800"
     )
 
     fun buildPreset(): ControllerPreset {
         val controls = buildControls()
 
         val controller = Controller(
-                id = "PioneerDdj1000",
+                id = "PioneerDdj800",
                 scriptFiles = listOf(
                         ScriptFile(
-                                filename = "pioneer-ddj1000.js",
+                                filename = "pioneer-ddj800.js",
                                 functionPrefix = FUNCTION_PREFIX
                         )
                 ),
@@ -58,7 +58,7 @@ object PioneerDdj1000 {
                 val knob = POTI_BASE + offset
                 val button = BUTTON_BASE + offset
 
-                +control(name = "${offset}TraxButton", status = 0x96, msb = 0x46 + offset, shiftOffset = if (offset % 2 == 0) 0x17 else 0x26)
+                +control(name = "${offset}Load", status = 0x96, msb = 0x46 + offset, shiftOffset = if (offset % 2 == 0) 0x17 else 0x26)
 
                 +control(name = "${offset}Play", status = button, msb = 0x0B)
                 +control(name = "${offset}Cue", status = button, msb = 0x0C)
@@ -99,10 +99,6 @@ object PioneerDdj1000 {
                             lsb = 0x27 + eqIndex * 0x04
                     )
                 }
-
-                +control(name = "${offset}CrossfaderAssignLeft", status = button, msb = 0x16)
-                +control(name = "${offset}CrossfaderAssignCenter", status = button, msb = 0x1D)
-                +control(name = "${offset}CrossfaderAssignRight", status = button, msb = 0x18)
             }
         }
 

@@ -13,7 +13,8 @@ val controllerPresets = listOf(
     ReloopBeatmix.buildPreset(),
     NumarkNv2.buildPreset(),
     HerculesDjci500.buildPreset(),
-    PioneerDdj1000.buildPreset()
+    PioneerDdj1000.buildPreset(),
+    PioneerDdj800.buildPreset()
 ).map { it.info.name to it }.toMap()
 
 fun main(args: Array<String>) {

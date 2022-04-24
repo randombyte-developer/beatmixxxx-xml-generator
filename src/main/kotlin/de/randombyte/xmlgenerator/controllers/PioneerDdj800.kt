@@ -51,6 +51,7 @@ object PioneerDdj800 {
             +control(name = "Master", status = 0xB6, msb = 0x08, lsb = 0x28)
 
             +control(name = "TraxEncoder", status = 0xB6, msb = 0x40, shiftOffset = 0x24)
+            +control(name = "TraxButton", status = 0x96, msb = 0x41)
             +control(name = "LibraryView", status = 0x96, msb = 0x7A)
             +control(name = "LibraryBack", status = 0x96, msb = 0x65)
 
@@ -66,7 +67,7 @@ object PioneerDdj800 {
                 +control(name = "${offset}Shift", status = button, msb = 0x3F)
                 +control(name = "${offset}Pfl", status = button, msb = 0x54)
 
-                +control(name = "${offset}LoopButton", status = button, msb = 0x14)
+                +control(name = "${offset}LoopButton", status = button, msb = 0x4D)
                 +control(name = "${offset}LoopIn", status = button, msb = 0x10)
                 +control(name = "${offset}LoopOut", status = button, msb = 0x11)
 
